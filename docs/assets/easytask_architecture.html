@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Easytask Enterprise Architecture</title>
+
+<style>
+:root {
+    --bg:#0b0f1a;
+    --panel:#161b2c;
+    --border:#2d334a;
+    --infra-clr:#38bdf8;
+    --apps-clr:#818cf8;
+    --client-clr:#10b981;
+    --text-h:#ffffff;
+    --text-p:#94a3b8;
+}
+
+/* ---------- BASE UI ---------- */
+body{
+    font-family:Inter,system-ui,-apple-system,sans-serif;
+    background:var(--bg);
+    color:var(--text-p);
+    margin:0;
+    padding:40px;
+    overflow-x: hidden;
+}
+.full-width-container{max-width:1600px;margin:auto;position:relative;}
+header{text-align:center;margin-bottom:50px;}
+header h1{color:var(--text-h);font-size:2.5rem;letter-spacing:-1px;}
+
+.easytask-platform{
+    background:var(--panel);
+    border:2px solid var(--border);
+    border-radius:24px;
+    padding:40px;
+    margin-bottom:80px;
+    position:relative;
+    box-shadow:0 20px 50px rgba(0,0,0,.3);
+    z-index: 2;
+}
+
+.platform-tag{
+    position:absolute;top:-15px;left:40px;
+    background:#2563eb;color:#fff;
+    padding:4px 20px;border-radius:8px;
+    font-size:.8rem;font-weight:800;
+}
+
+.section-title{
+    font-size:.85rem;font-weight:700;
+    text-transform:uppercase;
+    color:var(--text-h);
+    opacity:.7;
+    border-left:4px solid var(--infra-clr);
+    padding-left:15px;
+    margin-bottom:25px;
+    display:block;
+}
+.apps-title{border-left-color:var(--apps-clr);}
+
+.platform-grid{
+    display:grid;
+    grid-template-columns: 1fr 1.5fr 1fr; 
+    gap:40px; 
+    margin-bottom:40px;
+    align-items: center;
+}
+
+.card{
+    background:#0f172a;
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:25px 15px; 
+    text-align:center;
+    transition:.3s;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    position: relative;
+    z-index: 10;
+}
+
+#web-card, #maint-card {
+    max-width: 220px;
+    justify-self: center;
+    width: 100%;
+}
+
+#sch-card {
+    max-width: 450px;
+    justify-self: center;
+    width: 100%;
+}
+
+.card:hover{transform:translateY(-3px);border-color:var(--infra-clr);}
+.card small{text-transform:uppercase;font-size:.75rem;font-weight:700;color:var(--infra-clr);}
+.card b{color:var(--text-h);}
+
+.instance-cluster{
+    display:flex;gap:8px;justify-content:center;
+    margin-top:15px;padding-top:15px;
+    border-top:1px solid var(--border);
+}
+.instance-pill{
+    font-size:.6rem;font-weight:800;
+    padding:3px 6px;
+    border-radius:4px;
+    border:1px solid var(--apps-clr);
+    color:var(--apps-clr);
+    background:rgba(129,140,248,.1);
+    animation:pulse 2s infinite;
+}
+@keyframes pulse{0%{opacity:.5}50%{opacity:1}100%{opacity:.5}}
+
+.divider{text-align:center;letter-spacing:4px;color:var(--border);margin:40px 0;font-weight:800;}
+
+.client-section{
+    display:grid;
+    grid-template-columns:repeat(3,1fr); 
+    gap:20px;
+    position: relative;
+    z-index: 2;
+}
+
+.host{
+    background:var(--panel);
+    border:1px solid rgba(16,185,129,.2);
+    border-radius:20px;
+    padding:20px;
+    min-height:300px; 
+    display:flex;
+    flex-direction:column;
+}
+
+.host-header{
+    color:var(--client-clr);
+    font-weight:800;
+    font-size:.8rem;
+    border-bottom:1px solid rgba(16,185,129,.1);
+    padding-bottom:10px;
+    margin-bottom:15px;
+    text-align:center;
+}
+
+.agent-list{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    grid-template-rows: repeat(auto-fill, min-content); /* FIX: No extra vertical stretching */
+    gap:8px;
+    flex-grow:1;
+    align-content: start; /* FIX: Keeps rows grouped at the top */
+}
+
+.agent{
+    border:1px solid var(--client-clr);
+    background:rgba(16,185,129,.1);
+    color:var(--client-clr);
+    font-size:.55rem;
+    font-weight:700;
+    padding:4px 2px;
+    border-radius:4px;
+    text-align:center;
+}
+
+.integration-box{
+    margin-top:15px;
+    background:var(--client-clr);
+    color:#064e3b;
+    text-align:center;
+    font-weight:900;
+    font-size:.7rem;
+    padding:8px;
+    border-radius:8px;
+    text-transform:uppercase;
+}
+
+/* ---------- FLOW OVERLAY ---------- */
+.flow-layer{
+    position:absolute;
+    top:0; left:0;
+    width: 100%; height: 100%;
+    pointer-events:none;
+    z-index: 20;
+}
+
+.flow {
+    fill: none;
+    stroke-width: 2.5;
+    stroke-dasharray: 8 8;
+    animation: flowAnim 2s linear infinite;
+}
+
+.flow.infra { stroke: var(--infra-clr); filter: drop-shadow(0 0 2px var(--infra-clr)); }
+.flow.client { stroke: var(--client-clr); filter: drop-shadow(0 0 3px var(--client-clr)); }
+
+@keyframes flowAnim { to { stroke-dashoffset: -32; } }
+</style>
+</head>
+
+<body>
+<div class="full-width-container" id="main-container">
+
+<div class="easytask-platform" id="platform-shell">
+    <div class="platform-tag">EASYTASK PLATFORM</div>
+
+    <span class="section-title">Easytask Infra</span>
+    <div class="platform-grid" style="grid-template-columns: 1fr;">
+        <div class="card" id="infra-card">
+            <small>Managed Infrastructure</small>
+            <b>Easytask Infra</b>
+        </div>
+    </div>
+
+    <span class="section-title apps-title">Easytask Apps</span>
+    <div class="platform-grid">
+        <div class="card" id="web-card" style="border-color:var(--apps-clr)">
+            <small>Management UI</small>
+            <b>Easytask-Web</b>
+        </div>
+
+        <div class="card" id="sch-card" style="border-color:var(--apps-clr)">
+            <small>Orchestration Engine</small>
+            <b>Easytask-Scheduler (Cluster)</b>
+            <div class="instance-cluster">
+                <div class="instance-pill">SCH-01</div>
+                <div class="instance-pill">SCH-02</div>
+                <div class="instance-pill">SCH-03</div>
+                <div class="instance-pill" style="opacity:.4;border-style:dashed">SCH-N</div>
+            </div>
+        </div>
+
+        <div class="card" id="maint-card" style="border-color:var(--client-clr)">
+            <small style="color:var(--client-clr)">System Tasks</small>
+            <b style="color:var(--client-clr)">Maintenance Agent</b>
+        </div>
+    </div>
+</div>
+
+<div class="divider">DISTRIBUTED CLIENT NETWORK</div>
+
+<div class="client-section">
+    <div class="host" id="host-a">
+        <div class="host-header">CLIENT HOST A</div>
+        <div class="agent-list">
+            <div class="agent">AGN-01</div><div class="agent">AGN-02</div><div class="agent">AGN-03</div>
+            <div class="agent">AGN-04</div><div class="agent">AGN-05</div>
+        </div>
+        <div class="integration-box">Integration Server A</div>
+    </div>
+
+    <div class="host" id="host-b">
+        <div class="host-header">CLIENT HOST B</div>
+        <div class="agent-list">
+            <div class="agent">AGN-01</div><div class="agent">AGN-02</div><div class="agent">AGN-03</div>
+            <div class="agent">AGN-04</div><div class="agent">AGN-05</div><div class="agent">AGN-06</div>
+            <div class="agent">AGN-07</div><div class="agent">AGN-08</div>
+        </div>
+        <div class="integration-box">Integration Server B</div>
+    </div>
+
+    <div class="host" id="host-c">
+        <div class="host-header">CLIENT HOST C</div>
+        <div class="agent-list">
+            <div class="agent">AGN-01</div><div class="agent">AGN-02</div><div class="agent">AGN-03</div>
+        </div>
+        <div class="integration-box">Integration Server C</div>
+    </div>
+</div>
+
+<svg class="flow-layer" id="svg-canvas">
+    <defs>
+        <marker id="arr-infra" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="var(--infra-clr)"/>
+        </marker>
+        <marker id="arr-client" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="var(--client-clr)"/>
+        </marker>
+    </defs>
+</svg>
+
+</div>
+
+<script>
+function drawArchitecture() {
+    const svg = document.getElementById('svg-canvas');
+    const container = document.getElementById('main-container').getBoundingClientRect();
+    
+    while (svg.lastChild && (svg.lastChild.tagName === 'path')) {
+        svg.removeChild(svg.lastChild);
+    }
+
+    const getPos = (id, point) => {
+        const el = document.getElementById(id);
+        if(!el) return {x:0, y:0};
+        const r = el.getBoundingClientRect();
+        
+        if (point === 'top') return { x: (r.left + r.width / 2) - container.left, y: r.top - container.top };
+        if (point === 'bottom') return { x: (r.left + r.width / 2) - container.left, y: r.bottom - container.top };
+        if (point === 'right') return { x: r.right - container.left, y: (r.top + r.height / 2) - container.top };
+        if (point === 'left') return { x: r.left - container.left, y: (r.top + r.height / 2) - container.top };
+    };
+
+    const addPath = (d, type) => {
+        const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        p.setAttribute("d", d);
+        p.setAttribute("class", "flow " + type);
+        p.setAttribute("marker-end", `url(#${type === 'infra' ? 'arr-infra' : 'arr-client'})`);
+        svg.appendChild(p);
+    };
+
+    const infraPos = getPos('infra-card', 'bottom');
+    const appIds = ['web-card', 'sch-card', 'maint-card'];
+
+    appIds.forEach(id => {
+        const start = getPos(id, 'top');
+        const cpY = (start.y + infraPos.y) / 2;
+        addPath(`M ${start.x} ${start.y} C ${start.x} ${cpY}, ${infraPos.x} ${cpY}, ${infraPos.x} ${infraPos.y}`, 'infra');
+    });
+
+    const schRight = getPos('sch-card', 'right');
+    const maintLeft = getPos('maint-card', 'left');
+    addPath(`M ${schRight.x} ${schRight.y} L ${maintLeft.x} ${maintLeft.y}`, 'client');
+
+    const platformShell = getPos('platform-shell', 'bottom');
+    const hosts = ['host-a', 'host-b', 'host-c'];
+
+    hosts.forEach(hId => {
+        const hostPos = getPos(hId, 'top');
+        const cp1 = platformShell.y + 60;
+        const cp2 = hostPos.y - 100;
+        addPath(`M ${platformShell.x} ${platformShell.y} C ${platformShell.x} ${cp1}, ${hostPos.x} ${cp2}, ${hostPos.x} ${hostPos.y}`, 'client');
+    });
+}
+
+window.addEventListener('load', drawArchitecture);
+window.addEventListener('resize', drawArchitecture);
+setTimeout(drawArchitecture, 100);
+</script>
+
+</body>
+</html>

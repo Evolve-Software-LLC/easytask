@@ -1,0 +1,203 @@
+.mermaid {
+    width: 100%;
+    /* Adjust to your preferred size */
+    transition: transform 0.3s ease;
+    /* Smooth zoom effect */
+    cursor: zoom-in;
+    background: transparent !important;
+}
+
+.mermaid:hover {
+    transform: scale(1.5);
+    /* Zoom level */
+    cursor: zoom-out;
+}
+
+.no-copy+button.md-clipboard {
+    display: none;
+}
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    max-width: 200px;
+}
+
+img:hover {
+    transform: scale(1.05);
+    /* Slight zoom effect */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    /* Adds a shadow for depth */
+}
+
+/* --- Visual Fixes for Header & Logo --- */
+
+/* White header so the logo pops against a light background */
+:root {
+    --md-primary-fg-color: #FFFFFF;
+    --md-primary-fg-color--light: #FFFFFF;
+    --md-primary-fg-color--dark: #E0E0E0;
+}
+
+/* Keep header text, tabs, and icons dark for readability */
+.md-header,
+.md-tabs {
+    color: #0C1B2D !important;
+    background-color: #FFFFFF !important;
+    border-bottom: 1px solid #E0E0E0;
+}
+
+.md-header__button,
+.md-header__title,
+.md-tabs__link,
+.md-search__input,
+.md-search__input::placeholder {
+    color: #0C1B2D !important;
+}
+
+.md-header__button:hover {
+    color: #4195D1 !important;
+}
+
+.md-search__input {
+    background-color: rgba(12, 27, 45, 0.08) !important;
+    color: #0C1B2D !important;
+}
+
+.md-search__icon,
+.md-search__input::placeholder {
+    color: rgba(12, 27, 45, 0.5) !important;
+}
+
+/* --- Buttons (override white primary for visibility) --- */
+
+/* Secondary buttons: outlined navy */
+.md-button {
+    color: #0C1B2D !important;
+    border-color: #0C1B2D !important;
+}
+
+.md-button:hover {
+    color: #FFFFFF !important;
+    background-color: #0C1B2D !important;
+    border-color: #0C1B2D !important;
+}
+
+/* Primary button: navy background, white text (must come after .md-button) */
+.md-button--primary {
+    background-color: #0C1B2D !important;
+    color: #FFFFFF !important;
+    border-color: #0C1B2D !important;
+}
+
+.md-button--primary:hover {
+    background-color: #4195D1 !important;
+    border-color: #4195D1 !important;
+}
+
+/* Enlarge Logo in Header */
+.md-header__button.md-logo img {
+    height: 120px;
+    /* Enlarged logo for better visibility */
+    width: auto;
+    min-width: 120px;
+}
+
+/* Allow overflow for the massive logo */
+.md-header__title {
+    overflow: visible;
+}
+
+.md-header__button.md-logo {
+    padding: 0;
+    margin: 0 16px;
+    overflow: visible;
+}
+
+/* ============================================================
+   DARK MODE OVERRIDES
+   MkDocs Material adds [data-md-color-scheme="slate"] to <body>
+   when dark mode is active. All custom colors must be overridden.
+   ============================================================ */
+
+/* --- Dark Header & Navigation --- */
+[data-md-color-scheme="slate"] .md-header,
+[data-md-color-scheme="slate"] .md-tabs {
+    background-color: #1a1a2e !important;
+    color: #e0e0e0 !important;
+    border-bottom: 1px solid #333;
+}
+
+[data-md-color-scheme="slate"] .md-header__button,
+[data-md-color-scheme="slate"] .md-header__title,
+[data-md-color-scheme="slate"] .md-tabs__link {
+    color: #e0e0e0 !important;
+}
+
+[data-md-color-scheme="slate"] .md-header__button:hover {
+    color: #4195D1 !important;
+}
+
+[data-md-color-scheme="slate"] .md-search__input {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #e0e0e0 !important;
+}
+
+[data-md-color-scheme="slate"] .md-search__icon,
+[data-md-color-scheme="slate"] .md-search__input::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* --- Dark Buttons --- */
+[data-md-color-scheme="slate"] a.md-button,
+[data-md-color-scheme="slate"] .md-button {
+    color: #e0e0e0 !important;
+    border-color: #e0e0e0 !important;
+}
+
+[data-md-color-scheme="slate"] a.md-button:hover,
+[data-md-color-scheme="slate"] .md-button:hover {
+    color: #1a1a2e !important;
+    background-color: #4195D1 !important;
+    border-color: #4195D1 !important;
+}
+
+[data-md-color-scheme="slate"] .md-button--primary {
+    background-color: #4195D1 !important;
+    color: #FFFFFF !important;
+    border-color: #4195D1 !important;
+}
+
+[data-md-color-scheme="slate"] .md-button--primary:hover {
+    background-color: #7DD1E9 !important;
+    border-color: #7DD1E9 !important;
+}
+
+/* --- Dark Mermaid Diagrams --- */
+[data-md-color-scheme="slate"] .mermaid .node rect,
+[data-md-color-scheme="slate"] .mermaid .node polygon,
+[data-md-color-scheme="slate"] .mermaid .node circle {
+    fill: #2a2a3e !important;
+    stroke: #555 !important;
+}
+
+[data-md-color-scheme="slate"] .mermaid .nodeLabel,
+[data-md-color-scheme="slate"] .mermaid .label {
+    color: #e0e0e0 !important;
+}
+
+[data-md-color-scheme="slate"] .mermaid .edgeLabel {
+    color: #ccc !important;
+    background-color: #1a1a2e !important;
+}
+
+[data-md-color-scheme="slate"] .mermaid .edgePath .path {
+    stroke: #888 !important;
+}
+
+[data-md-color-scheme="slate"] .mermaid line,
+[data-md-color-scheme="slate"] .mermaid marker path {
+    stroke: #888 !important;
+}
